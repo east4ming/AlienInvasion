@@ -63,4 +63,22 @@ A Python Game Project. To study how to use python doing a game project.
 
 #### 在屏幕上绘制飞船
 
+### 重构: 模块 game_functions
+
+在大型项目中, 经常需要在添加新代码前重构既有代码. 重构旨在简化既有代码的结构, 使其更容易扩展.
+在本节中, 创建一个名为`game_functions`的新模块, 它将存储大量让游戏**外星人入侵**运行的函数.
+通过创建模块`game_functions`, 可避免`alien_invasion.py`太长, 并使其逻辑更容易理解.
+
+#### `check_events()`
+
+首先把管理事件的代码移到名为`check_events()`的函数中, 以简化`run_game()`并隔离事件管理循环.
+通过隔离事件循环, 可将事件管理与游戏的其他方面(如更新屏幕)分离.
+
+#### `update_screen()`
+
+为进一步简化`run_game()`, 将屏幕更新的代码移到一个名为`update_screen()`的函数中.
+
+这两个函数让while循环更简单, 并让后续开发更容易: 在模块`game_functions`而不是`run_game()`中完成大部分工作.
+
+鉴于一开始只想使用一个文件, 因此没有立刻引入模块`game_functions`. 这让我们能了解实际的开发过程: 一开始将代码编写得尽可能**简单**, 并在项目越来越**复杂**时进行重构.
 
