@@ -2,6 +2,7 @@ import pygame
 
 from settings import Settings
 from ship import Ship
+from game_character import GameCharacter
 import game_functions as gf
 
 
@@ -18,6 +19,9 @@ def run_game():
         (ai_settings.screen_width, ai_settings.screen_height))
     pygame.display.set_caption('Alien Invasion')
 
+    # 创建一个游戏角色
+    game_character = GameCharacter(screen)
+
     # 创建一艘飞船
     ship = Ship(screen)
 
@@ -29,6 +33,6 @@ def run_game():
         gf.check_events()
         
         # 每次循环时都重绘屏幕
-        gf.update_screen(ai_settings, screen, ship)
+        gf.update_screen(ai_settings, screen, ship, game_character)
 
 run_game()
