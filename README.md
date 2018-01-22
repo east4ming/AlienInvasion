@@ -96,3 +96,32 @@ A Python Game Project. To study how to use python doing a game project.
 
 在函数`check_events()`中包含形参ship, 因为玩家按向右箭头时, 需要将飞船向右移动.
 现在的效果是, 每按一次右箭头, 飞船向右移动1像素. 这并非控制飞船的高效形式. 下面来进行改进, 允许持续移动.
+
+#### 允许不断移动
+
+玩家按住右箭头不放时, 我们希望飞船不断地向右移动, 直到玩家松开为止. 我们让游戏检测`pygame.KEYUP`事件, 以便玩家松开右箭头时我们能够知道这一点; 然后, 我们将结合使用`KEYDOWN`和`KEYUP`事件, 以及一个名为`moving_right`的标志来实现持续移动.
+飞船不动时, 标志`moving_right`将为`False`. 玩家按下右箭头时, 我们将这个标志设置为`True`; 而玩家松开时, 我们将这个标志重新设置为`False`.
+飞船的属性都由`Ship`类控制, 因此我们将给这个类添加一个名为`moving_right`的属性和一个名为`update()`的方法. 方法`update()`检查标志`moving_right`的状态, 如果这个标志为`True`, 就调整飞船的位置. 每当需要调整飞船的位置时, 我们都调用这个方法.
+
+> 见修改后的`ship.py`
+
+在方法`__init__()`中, 添加了属性`self.moving_right`, 并将其初始值设置为`False`.
+添加方法`update()`, 它在前述标志为`True`时向右移动飞船.
+
+下面来修改`check_events()`, 使其在玩家按下右箭头时将`moving_right`设置为`True`, 并在玩家松开时将`moving_right`设置为`False`.
+
+> 见修改后的`game_functions.py`
+
+- 修改了游戏在玩家按下右箭头时响应的方式; 不直接调整飞船的位置, 而只是将`moving_right`设置为`True`.
+- 添加了一个新的`elif`块, 用于响应`KEYUP`事件: 玩家松开右箭头, 我们将`moving_right`设置为`False`
+
+最后, 修改`alien_invasion.py`中的`while`循环, 以便每次执行循环时都调用飞船的方法`update()`.
+飞船的位置将在检测到键盘事件后(但在更新屏幕前)更新. 这样, 玩家输入时, 飞船的位置将更新, 从而确保使用更新后的位置将飞船绘制到屏幕上.
+
+#### 左右移动
+
+> 见代码
+
+#### 调整飞船的速度
+
+

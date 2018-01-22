@@ -32,6 +32,9 @@ def run_game():
         # 为让程序响应事件, 编写一个事件循环, 以侦听事件, 并根据发生的事件执行相应任务
         gf.check_events(ship)
         
+        # 更新飞船位置
+        ship.update()
+        
         # 每次循环时都重绘屏幕
         gf.update_screen(ai_settings, screen, ship, game_character)
 
