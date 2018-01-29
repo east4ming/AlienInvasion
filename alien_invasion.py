@@ -23,7 +23,7 @@ def run_game():
     game_character = GameCharacter(screen)
 
     # 创建一艘飞船
-    ship = Ship(screen)
+    ship = Ship(ai_settings, screen)
 
     # 开始游戏的主循环
     while True:

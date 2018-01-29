@@ -10,3 +10,6 @@ class Settings():
         self.screen_height = 600
         self.bg_color = (230, 230, 230)
         # self.bg_color = (random.randint(0, 256), random.randint(0, 256), random.randint(0, 256))
+
+        # 飞船的设置
+        self.ship_speed_factor = 1.5

@@ -124,4 +124,75 @@ A Python Game Project. To study how to use python doing a game project.
 
 #### 调整飞船的速度
 
+当前, 每次执行while循环时, 飞船最多移动1像素, 但我们可以在Settings类中添加属性`ship_speed_factor`, 用于控制飞船的速度. 
 
+> 具体见`settings.py`
+
+通过将速度设置指定为小数值, 可在后面加快游戏的节奏时更细致地控制飞船的速度. 然而, rect的centerx等属性只能存储整数值, 因此需要对Ship类做修改.
+
+> 见`ship.py`
+
+- 在`__init__()`的形参列表中加入`ai_settings`, 让飞船能够获取其速度设置
+- 将形参`ai_settings`的值存储在一个属性中, 以便能够在`update()`中使用它.
+- `rect`只能存储整数部分, 定义一个可存储小数的新属性`self.center`. 使用`float()`将`self.rect.centerx`的值转换为小数, 并存储到`self.center`中
+- `update()`调整飞船位置时, 将`self.center`的值+或-`ai_settings.ship_speed_factor`的值. 更新`self.center`后, 再根据它来更新飞船位置`self.rect.centerx`. (`self.rect.centerx`只保存整数部分, 但是显示飞船看起来效果差不多.)
+- 在`alien_invasion.py`中创建Ship实例时, 需要传入实参`ai_settings`
+    > 见`alien_invasion.py`
+
+这样, 有助于让飞船反应速度足够快, 还能随着游戏进行加快游戏节奏.
+
+#### 限制飞船活动范围
+
+当前, 如果玩家一直按住箭头, 飞船会移动到屏幕外面, 消失. 下面来修复该问题, 让飞船到达边缘后停止移动.
+
+> 见`ship.py`
+
+- 在修改`self.center`的值之前检查飞船位置.
+- `self.rect.right`返回飞船外接矩形的右边缘x坐标, 如果小于`self.screen_rect.right`值, 说明飞船未触及屏幕右边缘.
+- 左边缘同理, 左边缘x坐标为0.
+
+#### 重构 `check_events()`
+
+随着游戏开发的进行, 函数`check_events()`将越来越长, 我们将其部分代码放在2个函数中: 一个处理KEYDOWN事件, 另一个处理KEYUP事件.
+
+> 见`game_functions.py`
+
+创建了2个新函数, 包含形参event和ship. 将函数`check_events`中相应代码替换成对这两个函数的调用. 这样, 函数`check_events()`更简单, 代码结构更清晰.
+
+### 回顾
+
+当前, 有4个文件.
+
+#### `alien_invasion.py`
+
+主文件. 创建一系列整个游戏都要用到的对象:
+
+- 存储在`ai_settings`中的设置
+- 存储在`screen`中的主显示surface
+- 飞船实例
+- 游戏主循环
+    - 调用`check_events()`
+    - `ship.update()`
+    - `update_screen()`
+
+要玩游戏, 只需要运行文件`alien_invasion.py`. 其他文件(settings.py game_functions.py ship.py)包含的代码被直接或间接地导入到这个文件中.
+
+#### `settings.py`
+
+包含`Settings`类, 该类只包含`__init__()`方法, 初始化控制游戏外观和飞船速度的属性.
+
+#### `game_functions.py`
+
+包含一系列函数, 游戏的大部分工作都由它们完成.
+
+- `check_events()`检测相关事件, 如按键和松开, 并使用辅助函数`check_keydown_events()`和`check_keyup_events()`来处理事件. 目前, 这些函数管理飞船的移动.
+- `update_screen()`, 用于在每次执行主循环时重绘屏幕
+
+#### `ship.py`
+
+包含Ship类. 
+
+- `__init__()`
+- 管理飞船位置的方法`update()`
+- 在屏幕上绘制飞船的方法`blitme()`
+- 飞船图像存储在文件夹images下的ship.bmp中.
