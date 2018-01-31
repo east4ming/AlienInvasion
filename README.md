@@ -196,3 +196,29 @@ A Python Game Project. To study how to use python doing a game project.
 - 管理飞船位置的方法`update()`
 - 在屏幕上绘制飞船的方法`blitme()`
 - 飞船图像存储在文件夹images下的ship.bmp中.
+
+### 射击
+
+添加射击功能 - 玩家按空格键发射子弹(小矩形), 子弹在屏幕中向上穿行, 抵达屏幕边缘后消失.
+
+#### 添加子弹设置
+
+更新`settings.py`, 在`__init__()`存储新类`Bullet`所需的值:
+
+> 具体见`settings.py`
+
+#### 创建`Bullet`类
+
+> 具体见`bullet.py`
+
+继承了模块`pygame.sprite`中的`Sprite`类. 通过使用精灵, 可将游戏中相关元素**编组**, 进而同时操作编组中的所有元素.
+
+- 创建子弹实例, 需要`ai_settings` `screen` `ship`实例, 还调用`super()`来继承`Sprite`
+- 创建子弹属性rect. 子弹并非基于图像, 因此必须使用`pygame.Rect()`类从空白开始创建矩形. 创建这个类的实例时, 必须提供矩形
+左上角的x y 坐标, 还有矩形的高度和宽度. 
+- 在(0, 0)处创建, 并移动到正确的位置. 子弹初始位置取决于飞船的当前位置. 子弹宽度和高度从`ai_settings`中获取.
+- 将子弹centerx设置为飞船的`rect.centerx`. 子弹应从飞船顶部射出, 因此子弹的rect的top设置为飞船的rect的top属性.
+- 将子弹的y坐标存储为小数值, 以便能微调子弹速度.
+- 将子弹的颜色/速度存储在`self.color`和`self.speed_factor`中.
+
+下面是`bullet.py`的第二部分 -- 方法`update()`和`draw_bullet()`.
