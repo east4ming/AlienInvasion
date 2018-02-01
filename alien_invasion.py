@@ -1,4 +1,5 @@
 import pygame
+from pygame.sprite import Group
 
 from settings import Settings
 from ship import Ship
@@ -24,18 +25,19 @@ def run_game():
 
     # 创建一艘飞船
     ship = Ship(ai_settings, screen)
+    # 创建一个用于存储子弹的编组
+    bullets = Group()
 
     # 开始游戏的主循环
     while True:
         # 监视键盘和鼠标事件
         # 事件是用户玩游戏时执行的操作, 如按键和移动鼠标
         # 为让程序响应事件, 编写一个事件循环, 以侦听事件, 并根据发生的事件执行相应任务
-        gf.check_events(ship)
-        
+        gf.check_events(ai_settings, screen, ship, bullets)
         # 更新飞船位置
         ship.update()
-        
+        bullets.update()
         # 每次循环时都重绘屏幕
-        gf.update_screen(ai_settings, screen, ship, game_character)
+        gf.update_screen(ai_settings, screen, ship, game_character, bullets)
 
 run_game()
