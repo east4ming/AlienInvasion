@@ -20,7 +20,8 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
     elif event.key == pygame.K_SPACE:
         # 创建一颗子弹, 并将其加入到bullets编组中
         fire_bullet(ai_settings, screen, ship, bullets)
-
+    elif event.key == pygame.K_q:
+        sys.exit()
 
 def check_keyup_events(event, ship):
     """响应松开"""
