@@ -360,3 +360,67 @@ bullets中的每颗子弹调用`bullet.update()`
 #### 创建 Alien 类
 
 将每个外星人的左边距都设置为外星人的宽度, 上边距设置为外星人的高度.
+
+#### 创建Alien实例
+
+在`alien_invasion.py`中创建Alien实例.
+
+#### 让外星人出现在屏幕上
+
+### 创建一群外星人
+
+要绘制一群外星人, 需要确定一行能容纳多少个外星人以及要绘制多少行外星人. 将首先计算外星人之间的水平间距, 并创建一行
+外星人, 再确定可用的垂直空间, 并创建整群外星人.
+
+#### 确定一行可容纳多少外星人
+
+> 暂定, 后续可随时调整
+
+- 两边共留2个外星人宽度的空间
+- 每个外星人占用2个外星人的空间
+
+`available_space_x = ai_settings.screen_width - (2 * alien_width)`
+`number_aliens_x = available_space_x / (2 * alien_width)`
+
+#### 创建多行外星人
+
+为创建一行外星人, 首先在`alien_invasion.py`中创建一个名为aliens的空编组, 用于存储全部的外星人, 再调用
+`game_functions.py`中创建外星人群的函数.
+
+ 不再在`alien_invasion.py`中直接创建外星人, 因此不需要导入Alien类.
+ 
+ - 先创建一个空编组, 用于存储所有的外星人.
+ - 调用函数create_fleet()
+ - 修改对`update_screen()`的调用, 让它能访问外星人编组.
+ - 修改`update_screen()`函数, 对编组调用`draw()`时, Pygame自动绘制编组的每个元素, 绘制位置由元素的属性rect决定.
+ 
+ #### 创建外星人群
+ 
+ 为放置外星人, 需要直到外星人的宽度和高度, 因此在计算前, 先创建一个外星人. 这个外星人不是外星人群的成员, 没有加入编组.
+ 从外星人的rect属性中获取外星人宽度, 并将这个值存储到`alien_width`中, 以免反复访问属性rect.
+ 使用地板除, 保证外星人数量为整数.
+ 接下来, 就是创建第一行外星人的循环.
+ 
+ 这行外星人在屏幕上偏左, 后续会让外星人群右移, 触及屏幕边缘后往下移动, 然后往左移动... 
+ 
+ #### 重构create_fleet()
+ 
+ 重构为3个函数:
+ 
+ - `get_number_aliens_x()` 代码都来自之前的`create_fleet()`, 且未做修改
+ - `create_alien()` 
+ - `create_fleet()` 改为对上两个函数的调用.
+ 
+ 通过这样的重构, 添加新行进而创建整群外星人将更容易.
+ 
+ #### 添加行
+ 
+ 计算外星人行数的可用空间:
+ `available_space_y = ai_settings.screen_height - 3 * alien_height - ship_height`
+ 在飞船上方留出一定的空白区域, 给玩家留出射杀外星人的时间.
+ 计算外星人行数:
+`number_rows = available_space_y / (2 * alien_height)`
+重复执行创建一行的外星人代码来创建多行.
+
+为创建多行, 使用2个嵌套循环. 内部循环创建一行外星人, 外部循环创建行数.
+在`create_alien()`中, 修改外星人的y坐标.
