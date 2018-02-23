@@ -572,3 +572,90 @@ bullets中的每颗子弹调用`bullet.update()`
 
 在后续一章中, 将添加一个Play按钮, 让玩家能够开始游戏, 以及游戏结束后再玩. 
 每当消灭一群外星人后, 我们都将加快游戏的节奏, 并添加一个积分系统.
+
+## 记分
+
+在本章, 会结束游戏<外星人入侵>的开发. 
+
+- 添加一个Play按钮, 用于根据需要启动游戏以及在游戏结束后重启游戏;
+- 在玩家等级提高时加快节奏, 并实现记分系统
+
+### 添加Play按钮
+
+添加一个Play按钮, 在游戏开始前出现, 在游戏结束后再次出现, 让玩家能够重开游戏.
+当前, 游戏在玩家运行*alien_invasion.py*就开始了. 下面让游戏一开始进入非活动状态, 并提示玩家单击Play按钮来开始游戏.
+
+> 具体见*game_stats.py*
+
+#### 创建 `Button` 类
+
+Pygame没有内置创建按钮的方法, 我们创建一个Button类, 用于创建带标签的实心矩形.
+
+> 具体见*button.py*
+
+- 导入模块`pygame.font`, 它让Pygame能将文本渲染到屏幕上.
+- `__init__()`方法接收4个参数, `msg`是要在按钮中显示ID文本.
+- 设置按钮尺寸
+- 设置`button_color`让按钮的rect对象为亮绿色, 并设置`text_color`让文本为白色
+- 指定使用什么字体来渲染文本. 实参`None`让Pygame使用默认字体, 48指定文本的字号.
+- 创建一个表示按钮的rect对象, 并将其center属性设置为屏幕的center属性
+- Pygame通过将要显示的文字渲染为图像来处理文本. 调用`prep_msg()`来处理.
+
+> 具体见*button.py*的`prep_msg()`
+
+- `prep_msg()`接受实参self及要渲染为图像的文本(msg).
+- 调用`font.render()`将存储在msg中的文本转换为图像, 将该图像存储在msg_image中.
+    - `font.render()`方法接收一个布尔实参, 指定开启还是关闭抗锯齿功能(抗锯齿让文本边缘更平滑)
+    - 余下的两个实参分别是文本颜色和背景色, 将文本背景色设置为按钮的颜色(如不指定背景色, Pygame以透明渲染文本)
+- 让文本图像在按钮上居中: 根据文本图像创建一个rect, 并将其center属性设置为按钮的center属性
+
+创建方法`draw_button()`, 调用它将按钮显示在屏幕上:
+
+> 见*button.py*的`draw_button()`
+
+- 调用`screen.fill()`来绘制表示按钮的矩形
+- 再调用`screen.blit()`, 向它传递一副图像以及该图像关联的rect对象, 从而在屏幕上绘制文本图像.
+
+至此, Button 类创建好了
+
+#### 在屏幕上绘制按钮
+
+使用Button类来创建一个Play按钮.
+
+> 具体见*alien_invasion.py*
+
+导入Button类, 并创建一个`play_button`实例, 将`play_button`实例传递给`update_screen()`, 以便更新屏幕时显示按钮
+接下来, 修改`update_screen()`, 以便在游戏处于非活动状态时显示Play按钮:
+
+> 具体见*game_functions.py*的`update_screen()`
+
+为让Play按钮显示在所有其他元素的上面, 在绘制其他游戏元素后再绘制该按钮, 然后切换到新屏幕.
+
+#### 开始游戏
+
+为在玩家单击Play按钮时开始新游戏, 需在*game_functions.py*中添加如下代码, 以监视与这个按钮相关的鼠标事件.
+
+修改了`check_events()`的定义, 在其中添加了形参stats和play_button. 将使用stats来访问标志game_active, 使用play_button
+来检查玩家是否单击了Play按钮.
+无论玩家单机屏幕的什么地方, Pygame都将检测到一个MOUSEBUTTONDOWN事件, 但我们只想让游戏在玩家用鼠标单机Play按钮时做出响应.
+为此, 使用`pygame.mouse.get_pos()`, 它返回一个元组, 包含玩家单击时的x y坐标. 将这些值传递给函数`check_play_button()`,
+这个函数使用`collidepoint()`检查鼠标单击位置是否在Play按钮的rect内. 如果是这样, 将`game_active`设为True, 游戏开始.
+更新*alien_invasion.py*中的传参.
+
+#### 重置游戏
+
+前面编写的代码只处理了玩家第一次单击Play按钮的情况, 而没有处理游戏结束的情况.
+为在玩家每次单击Play按钮时都重置游戏, 需要重置统计信息, 删除现有的外星人和子弹, 创建一群新的外星人, 并让飞船居中.
+
+> 具体见*game_functions.py*的`check_play_button()`
+
+更新了`check_play_button()`的定义
+
+- 重置游戏统计信息, 给玩家提供三艘新飞船.
+- 将`game_active`设置为True(这样, 这个函数的代码执行完毕后, 游戏就会开始)
+- 清空编组aliens和bullets
+- 创建一群新外星人
+- 飞船居中
+
+`check_events()`定义需要修改.
+现在, 每当玩家单击Play按钮时, 整个游戏都将正确地重置.
