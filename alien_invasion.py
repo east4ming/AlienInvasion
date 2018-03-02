@@ -3,6 +3,7 @@ from pygame.sprite import Group
 
 from settings import Settings
 from game_stats import GameStats
+from scoreboard import ScoreBoard
 from button import Button
 from ship import Ship
 from game_character import GameCharacter
@@ -27,6 +28,7 @@ def run_game():
     play_button = Button(ai_settings, screen, "Play")
     # 创建一个用于存储游戏统计信息的实例
     stats = GameStats(ai_settings)
+    sb = ScoreBoard(ai_settings, screen, stats)
     # 创建一艘飞船, 一个子弹编组, 一个外星人编组
     ship = Ship(ai_settings, screen)
     bullets = Group()
@@ -44,10 +46,11 @@ def run_game():
         if stats.game_active:
             # 更新飞船位置, 未消失的子弹, 外星人位置
             ship.update()
-            gf.update_bullets(ai_settings, screen, ship, aliens, bullets)
+            gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens,
+                              bullets)
             gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
         # 每次循环时都重绘屏幕
-        gf.update_screen(ai_settings, screen, stats, ship, game_character,
+        gf.update_screen(ai_settings, screen, stats, sb, ship, game_character,
                          aliens, bullets, play_button)
 
 
