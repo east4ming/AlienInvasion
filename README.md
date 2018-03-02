@@ -801,4 +801,10 @@ Play按钮原来所处的区域, 游戏将重新开始.
 
 > 见*scoreboard.py*
 
+方法`show_score()`需要在屏幕右上角显示当前得分, 并在顶部中央显示最高得分.
+
+> 见*scoreboard.py*
+
+为检查是否诞生了新的最高分, 在*game_functions.py*中添加一个新函数`check_high_score()`
+
 
