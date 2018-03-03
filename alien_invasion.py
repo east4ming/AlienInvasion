@@ -41,14 +41,15 @@ def run_game():
         # 监视键盘和鼠标事件
         # 事件是用户玩游戏时执行的操作, 如按键和移动鼠标
         # 为让程序响应事件, 编写一个事件循环, 以侦听事件, 并根据发生的事件执行相应任务
-        gf.check_events(ai_settings, screen, stats, play_button, ship, aliens,
-                        bullets)
+        gf.check_events(ai_settings, screen, stats, sb, play_button, ship,
+                        aliens, bullets)
         if stats.game_active:
             # 更新飞船位置, 未消失的子弹, 外星人位置
             ship.update()
             gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens,
                               bullets)
-            gf.update_aliens(ai_settings, stats, screen, ship, aliens, bullets)
+            gf.update_aliens(ai_settings, screen, stats, sb, ship, aliens,
+                             bullets)
         # 每次循环时都重绘屏幕
         gf.update_screen(ai_settings, screen, stats, sb, ship, game_character,
                          aliens, bullets, play_button)

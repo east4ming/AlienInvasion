@@ -807,4 +807,52 @@ Play按钮原来所处的区域, 游戏将重新开始.
 
 为检查是否诞生了新的最高分, 在*game_functions.py*中添加一个新函数`check_high_score()`
 
+#### 显示等级
 
+为在游戏中显示玩家的等级, 首先需要在GameStats中添加一个表示当前等级的属性. 为确保每次开始新游戏时都重置等级, 在`reset_stats()`中初始化.
+
+> 见*game_stats.py*
+
+再在ScoreBoard中在当前等分下方显示等级.
+
+> 见*scoreboard.py*
+
+在`check_bullet_alien_collisions()`中提高等级, 并更新等级图像.
+
+> 见*game_functions.py*
+
+为确保开始新游戏时更新积分和等级图像, 在按钮Play被单击时触发重置
+
+> 见*game_functions.py*的`check_play_button()`
+
+并更新*alien_invasion.py*中的相关代码.
+
+#### 显示余下的飞船数
+
+显示玩家还有多少艘飞船, 使用图像而不是数字. 在屏幕左上角绘制飞船图像.
+首先, 让Ship继承Sprite, 以便能够创建飞船编组.
+
+> 见*ship.py*
+
+接下来, 修改ScoreBoard, 在其中创建一个可供显示的飞船编组.
+
+> 见*scoreboard.py*
+
+为在游戏开始时让玩家知道他有多少艘飞船, 我们在开始新游戏时调用`prep_ships()`
+
+> 见*game_functions.py*
+
+还在飞船被外星人撞到时调用`prep_ships()`, 从而在玩家损失一艘飞船时更新飞船图像
+
+> 见*game_functions.py*的`update_aliens()`和`ship_hit()`和`check_aliens_bottom()`
+
+最后, 更新*alien_invasion.py*的调用
+
+### 小结
+
+- 如何创建用于开始新游戏的Play按钮
+- 如何检测鼠标事件
+- 在游戏处于活动状态时如何隐藏光标
+- 如何随游戏进行调整节奏
+- 如何实现积分系统
+- 如何以文本和非文本方式显示信息
